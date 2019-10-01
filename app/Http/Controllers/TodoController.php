@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TodoController extends Controller
 {
@@ -13,7 +15,9 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $list = ['hoc lap trinh', 'hoc moi', 'hoc css'];
+        // $list = DB::table('todos')->get();
+        $list = Todo::get();
+        // dd($list);
         return view('todo.todo')->with('list', $list);
     }
 
