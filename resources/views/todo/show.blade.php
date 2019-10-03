@@ -4,7 +4,9 @@
     <div class="table-responsive">
         <table class="table table-hover">
 
-			<h1>{{$id}}</h1>
+            <h1>{{$item->title}}</h1>
+            <hr>
+            <h4>{{$item->content}}</h4>
 
         </table>
     </div>

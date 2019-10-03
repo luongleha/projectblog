@@ -76,3 +76,5 @@
 // });
 
 Route::resource('todos', 'TodoController');
+
+Route::resource('users', 'UserController');

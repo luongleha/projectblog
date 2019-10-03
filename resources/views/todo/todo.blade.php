@@ -14,7 +14,9 @@
 			@if(count($list)>0)
 			<tr>
                 <th>#</th>
-                <th>Todo</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Status</th>
                 <th>Created at</th>
                 <th>Updated at</th>
                 <th>Action</th>
@@ -25,15 +27,17 @@
             	 <tr>
                 <td>{{$item->id}}</td>
                 <td>{{$item->title}}</td>
+                <td>{{$item->content}}</td>
+                <td>{{$item->status}}</td>
                 <td>{{$item->created_at}}</td>
                 <td>{{$item->updated_at}}</td>
                 <td>
-                    <a style="display: inline-block; width: 67px;" href="" class="btn btn-warning">Show</a>
-                    <a style="display: inline-block; width: 67px;" href="#" class="btn btn-success">Edit</a>
-                    <form style="display: inline-block;" action="#" method="post" accept-charset="utf-8">
-                        @csrf
-                        {{method_field('delete')}}
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                    <a style="display: inline-block; width: 67px;" href="{{route('todos.show', $item->id)}}" class="btn btn-warning">Show</a>
+                    <a style="display: inline-block; width: 67px;" href="{{route('todos.edit', $item->id)}}" class="btn btn-success">Edit</a>
+                    <form style="display: inline-block;" action="{{ route('todos.destroy', $item->id) }}" method="post" accept-charset="utf-8">
+                                @csrf
+                                {{method_field('delete')}}
+                                <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 </td>
             </tr>

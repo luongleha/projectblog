@@ -14,10 +14,19 @@ class TodoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        // lấy dữ lệu theo bảng
         // $list = DB::table('todos')->get();
-        $list = Todo::get();
+
+        // lấy tất cả dữ liệu
+        // $list = Todo::get();
+
+        // lấy theo dữ liệu mới nhất nhập vào        
+        $list = Todo::latest()->get();
+
+        // in ra thông tin nhập vào
         // dd($list);
+
         return view('todo.todo')->with('list', $list);
     }
 
@@ -39,7 +48,18 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        return 'store';
+         // Nhận dữ liệu từ $request
+        $title = $request->get('title');
+        $content = $request->get('content');
+        $status = $request->get('status');
+        // Lưu dữ liệu vào đối tượng $todo
+        $todo = new Todo();
+        $todo->title = $title;
+        $todo->content = $content;
+        $todo->status = $status;
+        $todo->save();
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('todos.index');
     }
 
     /**
@@ -50,7 +70,8 @@ class TodoController extends Controller
      */
     public function show($id)
     {
-        return view('todo.show')->with('id', $id);
+        $item = Todo::find($id);
+        return view('todo.show')->with('item', $item);
     }
 
     /**
@@ -61,7 +82,10 @@ class TodoController extends Controller
      */
     public function edit($id)
     {
-        return view('todo.edit');
+        // Lấy dữ liệu với $id
+        $item = Todo::find($id);
+        // Gọi đến view edit
+        return view('todo.edit')->with('item', $item);
     }
 
     /**
@@ -73,7 +97,29 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return 'update';
+        // Nhận dữ liệu từ $request
+        $title = $request->get('title');
+        $content = $request->get('content');
+        $status = $request->get('status');
+
+        // dump($title);
+        // dump($content);
+        // dump($status);
+
+        // dd();
+        
+        // Tìm todo tương ứng với id
+        $todo = Todo::find($id);
+        //Cập nhật dữ liệu mới
+        $todo->title = $title;
+        $todo->content = $content;
+        $todo->status = $status;
+
+
+        // Lưu dữ liệu
+        $todo->save();
+        //Chuyển hướng đến trang danh sách
+        return redirect()->route('todos.index');
     }
 
     /**
@@ -84,6 +130,9 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
-        return 'destroy';
+        // Xoá với id tương ứng 
+        Todo::destroy($id);
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('todos.index');
     }
 }
