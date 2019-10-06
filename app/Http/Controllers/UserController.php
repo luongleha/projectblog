@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $list = DB::table('users')->get();
+        $list = User::get();
         return view('admin.user')->with('list', $list);
     }
 
@@ -24,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.add');
     }
 
     /**
@@ -35,7 +36,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = $request->get('name');
+        $email = $request->get('email');
+        $password = $request->get('password');
+        // Lưu dữ liệu vào đối tượng $user
+        $user = new User();
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = $password;
+        $user->save();
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('users.index');
     }
 
     /**
@@ -46,7 +57,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $item = User::find($id);
+        return view('admin.show')->with('item', $item);
     }
 
     /**
@@ -57,7 +69,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        // Lấy dữ liệu với $id
+        $item = User::find($id);
+        // Gọi đến view edit
+        return view('admin.edit')->with('item', $item);
     }
 
     /**
@@ -69,7 +84,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Nhận dữ liệu từ $request
+        $name = $request->get('name');
+        $email = $request->get('email');
+
+        // dump($id);
+        // dump($name);
+        // dump($email);
+
+        // dd();
+        
+        // Tìm user tương ứng với id
+        $user = User::find($id);
+        //Cập nhật dữ liệu mới
+        $user->name = $name;
+        $user->email = $email;
+
+
+        // Lưu dữ liệu
+        $user->save();
+        //Chuyển hướng đến trang danh sách
+        return redirect()->route('users.index');
     }
 
     /**
@@ -80,6 +115,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Xoá với id tương ứng 
+        User::destroy($id);
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('users.index');
     }
 }
